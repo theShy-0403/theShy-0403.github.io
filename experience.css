@@ -1,0 +1,145 @@
+/* 播放器放在路由容器之外；动效只修饰内容，不影响文章访问和播放。 */
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+body{padding-bottom:100px}
+main:focus{outline:none}
+.header-inner{height:84px}
+.desktop-nav{gap:15px}
+.desktop-nav a{padding:10px 17px;border:1px solid transparent;border-radius:9px;transition:background .25s,border-color .25s,color .25s}
+.desktop-nav a:hover{background:#b6a0ff0c;border-color:#b6a0ff16}
+.desktop-nav a.active{background:#b6a0ff0b}
+.desktop-nav a.active:after{bottom:2px}
+.brand-icon{display:grid;place-items:center;padding:0;line-height:1;font-size:29px;letter-spacing:0;transition:transform .4s,box-shadow .4s}
+.brand:hover .brand-icon{transform:rotate(8deg);box-shadow:0 0 24px #b6a0ff45}
+.anime-hero{height:calc(100svh - 84px)}
+/* 流星独立于插画，只移动光点和光尾，避免整张背景位移。 */
+.hero-meteors{position:absolute;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
+.hero-meteors i{position:absolute;left:68%;top:8%;width:3px;height:3px;border-radius:50%;background:#f5f0ff;box-shadow:0 0 6px #fff,0 0 15px #bcabff;opacity:0;animation:meteor-flight 7.2s .2s linear infinite;--tail:clamp(95px,12vw,180px)}
+.hero-meteors i:after{content:'';position:absolute;left:1px;top:1px;width:var(--tail);height:1.5px;transform:rotate(-35deg);transform-origin:left center;background:linear-gradient(90deg,#e7e5ff,#b4bbff9c 25%,#b6a0ff24 65%,transparent);border-radius:50%}
+.hero-meteors i:nth-child(2){left:95%;top:13%;animation-duration:9.4s;animation-delay:2.4s;--tail:clamp(75px,10vw,145px)}
+.hero-meteors i:nth-child(3){left:78%;top:28%;animation-duration:8.1s;animation-delay:4.9s;--tail:clamp(65px,8vw,120px)}
+.hero-meteors i:nth-child(4){left:49%;top:4%;animation-duration:11.3s;animation-delay:7s;--tail:clamp(60px,7vw,105px)}
+@keyframes meteor-flight{0%{opacity:0;transform:translate3d(0,0,0)}3%{opacity:.95}18%{opacity:.8}25%,100%{opacity:0;transform:translate3d(-34vw,23.8vw,0)}}
+@media(prefers-reduced-motion:reduce){.hero-meteors{display:none}}
+.anime-hero .hero-copy{max-width:640px}
+.anime-hero h1{font-weight:800;letter-spacing:3px;line-height:1.28}
+.anime-hero h1>span{background-image:linear-gradient(100deg,#f2e8ff 0%,#c3afff 48%,#a6e8ff 100%);text-shadow:none}
+.hero-overline{color:#c1bee4;letter-spacing:4.6px}
+.hero-badge{box-shadow:inset 0 1px 0 #ffffff12,0 6px 30px #04081b18;border-color:#d2c6ff40}
+.anime-hero .hero-description{color:#dae0f5;font-size:15px;line-height:2.15}
+.hero-actions .button{min-height:50px;padding-inline:25px;border-radius:12px}
+.button:active,.music-play:active{transform:scale(.96)}
+.hero-footnote{opacity:.85}
+.post-card{border-radius:20px;box-shadow:0 12px 38px #01061430,inset 0 1px 0 #ffffff06}
+.post-card:hover{border-color:#b6a0ff75;box-shadow:0 20px 54px #02051e65,0 0 0 1px #b6a0ff0a;transform:translateY(-6px)}
+.post-content{padding:25px 26px}
+.post-title{letter-spacing:.2px;line-height:1.65}
+.post-excerpt{font-size:13px;line-height:1.95}
+.post-arrow{width:31px;height:31px;transition:transform .28s,background .28s,color .28s}
+.post-link:hover .post-arrow{transform:rotate(7deg)}
+.featured .post-content{padding:31px}
+.featured .post-title{font-size:25px}
+.featured .post-image{min-height:318px}
+.about-card,.note-card{box-shadow:inset 0 1px 0 #ffffff08,0 12px 32px #01061420}
+.avatar{box-shadow:0 0 0 5px #b6a0ff0b,0 0 0 6px #b6a0ff26,0 8px 24px #0003;margin-bottom:23px}
+.closing-banner{background:linear-gradient(100deg,#28204d70,#142e4040),url('./assets/anime-journey.jpg') center 48%/cover;border-color:#b6a0ff35;isolation:isolate}
+.closing-banner:before{content:'';position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,#101629ed,#101629cc 65%,#10162970)}
+.closing-banner h2{color:#eee7ff}.closing-banner p{color:#c8c8df}.closing-banner .banner-symbol{color:#d2c3ff}
+.footer-actions{display:flex;align-items:center;gap:22px}
+button.footer-link{border:0;background:none;padding:10px 0;font-family:inherit;min-height:44px}
+.back-top{bottom:30px}
+
+.site-intro{display:none;position:fixed;inset:0;z-index:150;pointer-events:none;place-content:center;justify-items:center;gap:19px;color:#eee9ff;background:radial-gradient(ellipse at 50% 45%,#252045 0%,#0b1024 42%,#080d1c 75%)}
+html[data-intro=playing] .site-intro{display:grid;animation:intro-depart .55s 1.05s cubic-bezier(.76,0,.24,1) forwards}
+.intro-orbit{width:105px;height:105px;display:grid;place-items:center;position:relative;margin-bottom:13px;animation:intro-star-in .75s cubic-bezier(.16,1,.3,1) both}
+.intro-orbit span{position:absolute;inset:0;border:1px solid #c2acff40;border-radius:50%;transform:rotate(-35deg) scaleY(.55)}
+.intro-orbit span:nth-child(2){transform:rotate(35deg) scaleY(.55);border-color:#89d7ff45}
+.intro-orbit:after{content:'';position:absolute;inset:-30px;background:#a18aff1c;filter:blur(24px);border-radius:50%}
+.intro-orbit svg{width:48px;height:48px;fill:#d2c3ff;stroke:#eadfff;stroke-width:.6;filter:drop-shadow(0 0 17px #b6a0ff70)}
+.intro-wordmark{font-size:29px;font-weight:700;letter-spacing:6px;display:flex;flex-direction:column;align-items:center;gap:8px;animation:intro-word-in .6s .15s both}
+.intro-wordmark span{font-size:10px;letter-spacing:5px;color:#b9acd9;font-weight:400}
+.site-intro p{font:9px var(--mono);letter-spacing:3px;color:#999bc4;margin:3px 0 9px;animation:intro-word-in .6s .3s both}
+.intro-light{width:100px;height:1px;position:relative;background:#b6a0ff18;overflow:hidden}
+.intro-light:after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,#ccbaff,#8ddaff,transparent);animation:intro-trail 1.25s ease-in-out both}
+html[data-intro=playing] .anime-hero .hero-copy,html[data-intro=playing] .anime-hero-bg{animation-play-state:paused}
+@keyframes intro-star-in{from{opacity:0;transform:translateY(15px) rotate(-35deg) scale(.65)}to{opacity:1;transform:none}}
+@keyframes intro-word-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes intro-trail{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
+@keyframes intro-depart{to{opacity:0;transform:scale(1.07);visibility:hidden}}
+
+[data-reveal=pending]{opacity:0;transform:translateY(22px)}
+[data-reveal=visible]{animation:content-reveal .6s var(--reveal-delay,0ms) cubic-bezier(.16,1,.3,1) backwards}
+@keyframes content-reveal{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+.ripple-static{position:relative}.ripple-host{isolation:isolate;overflow:hidden}
+.click-ripple{position:absolute;border-radius:50%;pointer-events:none;z-index:5;background:radial-gradient(circle,#d6c6ff35 0%,#a1d9ff1f 45%,transparent 68%);animation:click-ripple .6s cubic-bezier(.2,.7,.3,1) forwards}
+.click-effects{position:fixed;inset:0;z-index:110;pointer-events:none;overflow:hidden}
+.click-sparkle{position:absolute;color:#cfc2ff;text-shadow:0 0 12px #a78bff85;font-size:17px;line-height:1;animation:click-sparkle .6s ease-out forwards}
+@keyframes click-ripple{from{transform:scale(0);opacity:.95}to{transform:scale(1);opacity:0}}
+@keyframes click-sparkle{from{transform:translate(-50%,-50%) rotate(0) scale(.4);opacity:1}to{transform:translate(-50%,-34px) rotate(65deg) scale(1.05);opacity:0}}
+
+.music-player{position:fixed;bottom:25px;left:26px;width:326px;z-index:40;color:#ede9ff;font-family:var(--sans)}
+.music-dock{display:flex;gap:10px;align-items:center;padding:11px 13px 11px 10px;border:1px solid #b9a5ff40;border-radius:18px;background:linear-gradient(130deg,#23213ae8,#111b30eb);box-shadow:0 14px 44px #02061880,inset 0 1px 0 #ffffff0d;backdrop-filter:blur(25px);-webkit-backdrop-filter:blur(25px);transition:border-color .25s,box-shadow .25s}
+.music-dock:hover{border-color:#bca4ff75;box-shadow:0 15px 45px #02061890,0 0 25px #b6a0ff0b}
+.music-summary{display:flex;align-items:center;gap:13px;flex:1;min-width:0;padding:0;border:0;background:none;text-align:left;color:inherit;border-radius:11px}
+.music-disc{width:53px;height:53px;flex-shrink:0;border-radius:50%;position:relative;display:grid;place-items:center;background:repeating-radial-gradient(circle at center,#171827 0,#171827 2px,#2c2b41 3px,#171827 4px);box-shadow:0 0 0 1px #c3adff45,0 0 0 4px #151426,0 3px 12px #0005;margin:3px;animation:record-spin 12s linear infinite;animation-play-state:paused}
+.music-disc>span{width:31px;height:31px;border-radius:50%;background:url('./assets/anime-night.jpg') 80% 28%/180px auto;box-shadow:0 0 0 1px #c3b8ee38;position:relative}
+.music-disc>span:after{content:'';position:absolute;width:5px;height:5px;border:1px solid #e7ddff90;background:#131326;border-radius:50%;left:50%;top:50%;transform:translate(-50%,-50%)}
+.music-player.is-playing .music-disc{animation-play-state:running}
+.music-track{display:flex;flex-direction:column;gap:3px;min-width:0;flex:1;padding:1px 0}
+.music-station{font:8px var(--mono);letter-spacing:1.7px;color:#b6a3df;display:flex;align-items:center;gap:7px;white-space:nowrap}
+.music-station i{width:4px;height:4px;border-radius:50%;background:#827693}
+.is-playing .music-station i{background:#8ee2e7;box-shadow:0 0 7px #8ee2e780}
+.music-track strong{font-size:13px;line-height:1.8;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:.5px}
+.music-track small{font-size:10px;color:#a8a8c7;line-height:1.6;white-space:nowrap}
+.music-track small span{font-size:9px;color:#9597b4}
+.music-play{width:42px;height:42px;display:grid;place-items:center;flex-shrink:0;border:1px solid #ded0ff60;border-radius:50%;background:linear-gradient(135deg,#d5c4ff,#abb7f5);color:#25213e;box-shadow:0 4px 17px #b6a0ff25;transition:transform .2s,box-shadow .2s}
+.music-play:hover{box-shadow:0 4px 23px #b6a0ff55;transform:scale(1.05)}
+.music-play svg{width:19px;height:19px;fill:currentColor;stroke:none}
+.is-loading .music-play{position:relative}
+.is-loading .music-play:after{content:'';position:absolute;inset:-5px;border:1px solid #cbb8ff35;border-top-color:#d8c8ff;border-radius:50%;animation:record-spin .85s linear infinite}
+.music-panel{margin-bottom:12px;border:1px solid #b9a5ff40;border-radius:20px;background:linear-gradient(145deg,#24213cf5,#111a2ff7);box-shadow:0 18px 50px #02061885;backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px);overflow:hidden;transform-origin:bottom left;animation:music-panel-in .28s cubic-bezier(.16,1,.3,1);max-height:calc(100dvh - 120px);overflow-y:auto}
+.music-panel-art{height:100px;position:relative;padding:21px 23px;display:flex;flex-direction:column;gap:10px;justify-content:center;isolation:isolate;background:url('./assets/anime-journey.jpg') center 42%/cover;border-bottom:1px solid #baa5ff20}
+.music-panel-art:before{content:'';position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,#1d1b3acf,#19213c65)}
+.music-panel-art>span:first-child{font:8px var(--mono);letter-spacing:2px;color:#d3caed}
+.music-panel-art>strong{font-size:18px;font-weight:500;letter-spacing:2px;color:#faf4ff}
+.music-panel-art .music-constellation{position:absolute;right:22px;top:22px;font-size:32px;color:#e7d8ff;line-height:1}
+.music-panel-body{padding:19px 23px 16px}
+.music-song-heading{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:18px}
+.music-song-heading h2{font-size:16px;font-weight:500;letter-spacing:1px;line-height:1.6;margin:0 0 4px}
+.music-song-heading p{font-size:11px;color:#b0adc9;margin:0}
+.music-wave{display:flex;align-items:center;gap:3px;height:24px}
+.music-wave i{width:3px;height:7px;background:linear-gradient(#b6a0ff,#70e4ff);border-radius:3px;animation:music-wave .8s ease-in-out infinite alternate;animation-play-state:paused}
+.music-wave i:nth-child(2){height:18px;animation-delay:-.3s}.music-wave i:nth-child(3){height:12px;animation-delay:-.5s}.music-wave i:nth-child(4){height:21px;animation-delay:-.2s}
+.is-playing .music-wave i{animation-play-state:running}
+.music-range{display:block;--range-fill:0%;width:100%;height:20px;margin:0;appearance:none;-webkit-appearance:none;background:transparent;cursor:pointer;touch-action:pan-y;accent-color:#bca8f4}
+.music-range::-webkit-slider-runnable-track{height:3px;border-radius:4px;background:linear-gradient(90deg,#c3a9ff 0%,#8ed9f1 var(--range-fill),#a39bd82a var(--range-fill))}
+.music-range::-webkit-slider-thumb{appearance:none;-webkit-appearance:none;width:11px;height:11px;margin-top:-4px;border:2px solid #eee6ff;border-radius:50%;background:#b5a2ed;box-shadow:0 0 10px #b6a0ff45}
+.music-range::-moz-range-track{height:3px;border-radius:4px;background:#a39bd82a}.music-range::-moz-range-progress{height:3px;background:#bca8f4}.music-range::-moz-range-thumb{width:8px;height:8px;border:2px solid #eee6ff;background:#b5a2ed;border-radius:50%}
+.music-range:disabled{cursor:default;opacity:.4}
+.music-times{display:flex;justify-content:space-between;font:9px var(--mono);color:#b4afcb;margin:2px 0 13px}
+.music-settings{display:flex;gap:9px;align-items:center}
+.music-icon{border:0;background:none;min-width:36px;width:36px;height:40px;border-radius:9px;color:#9c9bb8;display:grid;place-items:center;padding:0;transition:background .2s,color .2s}
+.music-icon svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.music-icon:hover{background:#b6a0ff15;color:#e1d6ff}.music-icon[aria-pressed=true]{color:#c3afff;background:#b6a0ff0c}
+.volume-range{flex:1;min-width:50px}
+#music-volume-value{font:9px var(--mono);color:#b4afcb;min-width:29px;text-align:right}
+.music-status{color:#b4afca;font-size:10px;line-height:1.8;margin:12px 0;min-height:18px}
+.music-source{display:flex;justify-content:space-between;gap:15px;padding-top:12px;border-top:1px solid #b6a0ff1a;color:#c5b2f4;font-size:10px;min-height:30px}
+.music-source:hover{color:#eee4ff}
+.music-player:focus-within{outline:none}
+@keyframes record-spin{to{transform:rotate(360deg)}}
+@keyframes music-wave{to{transform:scaleY(.35)}}
+@keyframes music-panel-in{from{opacity:0;transform:translateY(9px) scale(.97)}to{opacity:1;transform:none}}
+
+html[data-theme=light] .post-card{box-shadow:0 8px 30px #7163a80c,inset 0 1px 0 #fff}
+html[data-theme=light] .post-card:hover{box-shadow:0 18px 40px #7163a81f;border-color:#a897d1}
+html[data-theme=light] .music-dock,html[data-theme=light] .music-panel{color:#312a49;background:linear-gradient(145deg,#fffafff7,#f0f0ffef);border-color:#b8a4db80;box-shadow:0 12px 40px #4c3d6b25}
+html[data-theme=light] .music-station{color:#74618e}html[data-theme=light] .music-track small,html[data-theme=light] .music-track small span,html[data-theme=light] .music-song-heading p,html[data-theme=light] .music-status,html[data-theme=light] .music-times,html[data-theme=light] #music-volume-value{color:#746983}
+html[data-theme=light] .music-icon{color:#7c718b}html[data-theme=light] .music-icon[aria-pressed=true],html[data-theme=light] .music-source{color:#7655b5}
+html[data-theme=light] .music-source{border-color:#ab96d339}
+html[data-theme=light] .closing-banner .banner-symbol{color:#d2c3ff}
+@media(max-width:1100px){.desktop-nav{gap:7px}.desktop-nav a{padding-inline:12px}.featured .post-content{padding:25px}.featured .post-title{font-size:23px}}
+@media(min-width:681px) and (max-height:850px){.anime-hero{min-height:680px}.hero-content{padding-bottom:70px}.anime-hero h1{font-size:clamp(54px,5.4vw,72px)}.hero-overline{margin-top:21px}.anime-hero .hero-description{margin-bottom:26px}}
+@media(max-width:900px){.header-inner{height:76px}.anime-hero{height:calc(100svh - 76px)}.anime-hero .hero-description{font-size:13px}.music-player{left:20px;bottom:20px}.featured .post-title{font-size:21px}.post-content{padding:22px}.desktop-nav{margin-left:0}.desktop-nav a{padding-inline:9px}.brand{letter-spacing:1px}.brand-dot{letter-spacing:0}}
+@media(max-width:680px){body{padding-bottom:100px}.header-inner{height:70px}.anime-hero{height:auto}.hero-actions .button{padding-inline:18px;min-height:47px;font-size:11px}.anime-hero h1{letter-spacing:1px}.anime-hero .hero-description{font-size:12px;line-height:2.1}.hero-overline{letter-spacing:1.8px}.music-player{left:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px));width:min(310px,calc(100% - 80px))}.music-dock{padding:9px;gap:7px;border-radius:16px}.music-summary{gap:9px}.music-disc{width:42px;height:42px}.music-disc>span{width:25px;height:25px}.music-play{width:38px;height:38px}.music-track strong{font-size:12px;letter-spacing:0}.music-station{font-size:6.5px;letter-spacing:1px;gap:5px}.music-track small{font-size:9px}.music-track small span{font-size:8px}.music-panel{width:min(326px,calc(100vw - 28px))}.music-panel-body{padding:17px 21px}.music-panel-art{height:88px}.back-top{right:15px;bottom:calc(26px + env(safe-area-inset-bottom,0px));width:38px;height:38px}.heading-note{max-width:95px;line-height:1.8;text-align:right}.heading-note:before{display:none}.footer-actions{gap:18px}.footer-link{font-size:9px}}
+@media(max-width:500px){.article-grid{grid-template-columns:1fr;gap:23px}.post-card.featured,.post-card.wide{grid-column:auto}.post-card .post-link,.post-card.featured .post-link,.post-card.wide .post-link{display:flex;flex-direction:column}.post-card .post-image,.post-card.featured .post-image,.post-card.wide .post-image{order:0;aspect-ratio:16/9;min-height:0}.post-card .post-content,.post-card.featured .post-content,.post-card.wide .post-content{padding:22px 24px}.post-card .post-title,.post-card.featured .post-title,.post-card.wide .post-title{font-size:21px;line-height:1.6;margin-top:11px}.post-excerpt,.featured .post-excerpt{font-size:13px;-webkit-line-clamp:2;margin-bottom:20px}.post-meta{font-size:10px;gap:9px}.category-label{font-size:10px}.post-tags{font-size:10px;gap:10px}.featured-badge{font-size:9px;margin-bottom:11px}.post-meta .reading-time{display:none}.sidebar{grid-template-columns:1fr}.about-card{grid-row:auto}.about-card .avatar{width:65px;height:65px}.about-card .about-text{font-size:13px}.sidebar-section{padding:12px 4px}.tag-pill{font-size:11px;padding:8px 12px}.sidebar-section h3{font-size:13px}.note-card{padding:23px}.note-card p{font-size:13px}}
+@media(prefers-reduced-motion:reduce){.site-intro,html[data-intro=playing] .site-intro{display:none}[data-reveal=pending],[data-reveal=visible]{opacity:1;transform:none;animation:none}.music-disc,.music-wave i,.is-loading .music-play:after{animation:none}.click-effects,.click-ripple{display:none}.music-panel{animation:none}.post-card:hover{transform:none}}

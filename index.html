@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0a1023">
+  <meta name="description" content="郑经人的个人博客，一个关于代码、设计和日常灵感的数字花园。记录灵感，构建热爱。">
+  <title>郑经人 · 记录灵感，构建热爱</title>
+  <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="./anime.css">
+  <link rel="stylesheet" href="./experience.css">
+  <link rel="preload" as="image" href="./assets/anime-night-sky.jpg">
+  <script>try{document.documentElement.dataset.theme=localStorage.getItem('zlog-theme')||'dark'}catch{}</script>
+  <script>try{if(!matchMedia('(prefers-reduced-motion: reduce)').matches&&!sessionStorage.getItem('zlog-welcome-v1')&&(!location.hash||location.hash==='#/')){document.documentElement.dataset.intro='playing';sessionStorage.setItem('zlog-welcome-v1','1');setTimeout(()=>delete document.documentElement.dataset.intro,2200)}}catch{}</script>
+  <script src="./posts.js" defer></script>
+  <script src="./app.js" defer></script>
+  <script src="./experience.js" defer></script>
+</head>
+<body>
+  <div class="site-intro" id="site-intro" aria-hidden="true">
+    <div class="intro-orbit"><span></span><span></span><svg viewBox="0 0 64 64"><path d="M32 4 39 25 60 32 39 39 32 60 25 39 4 32 25 25Z"/></svg></div>
+    <div class="intro-wordmark">郑经人<span>の幻想手记</span></div>
+    <p>A LITTLE WORLD, JUST FOR YOU.</p><div class="intro-light"></div>
+  </div>
+  <a class="skip-link" href="#main">跳到正文</a>
+  <div class="reading-progress" id="reading-progress"></div>
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="#/" class="brand" aria-label="郑经人博客首页"><span class="brand-icon" aria-hidden="true">✦</span><span>郑经人<span class="brand-dot">の幻想手记</span></span></a>
+      <nav class="desktop-nav" aria-label="主导航">
+        <a href="#/" data-nav="home">首页<span class="nav-indicator"></span></a>
+        <a href="#/articles" data-nav="articles">文章</a>
+        <a href="#/archive" data-nav="archive">归档</a>
+        <a href="#/about" data-nav="about">关于</a>
+      </nav>
+      <div class="header-actions">
+        <button class="search-trigger" id="open-search" aria-label="搜索文章"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4.6 4.6"/></svg><span>搜索</span><kbd>⌘ K</kbd></button>
+        <span class="action-divider"></span>
+        <button class="icon-button" id="theme-toggle" aria-label="切换明暗主题"></button>
+        <button class="icon-button mobile-menu-button" id="mobile-menu-toggle" aria-label="展开导航" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+      </div>
+    </div>
+    <nav class="mobile-nav" id="mobile-nav" aria-label="手机导航" hidden><a href="#/">首页</a><a href="#/articles">文章</a><a href="#/archive">归档</a><a href="#/about">关于</a></nav>
+  </header>
+  <main id="main" tabindex="-1"></main>
+  <footer class="site-footer">
+    <div class="footer-inner"><a href="#/" class="footer-brand">郑经人<span>让好奇心，一直在线。</span></a><span class="footer-note">© 2026 郑经人 · 用热爱编织的小站</span><div class="footer-actions"><button class="footer-link" id="replay-intro">重播入场 ✧</button><a href="#/about" class="footer-link">关于这个空间 <span>↗</span></a></div></div>
+  </footer>
+  <aside class="music-player" id="music-player" aria-label="背景音乐播放器">
+    <section class="music-panel" id="music-panel" aria-label="播放设置" hidden>
+      <div class="music-panel-art"><span>THE SOUND OF MEMORIES</span><strong>给回忆，一点声音。</strong><span class="music-constellation" aria-hidden="true">✧</span></div>
+      <div class="music-panel-body">
+        <div class="music-song-heading"><div><h2>把回忆拼好给你</h2><p>王贰浪</p></div><span class="music-wave" aria-hidden="true"><i></i><i></i><i></i><i></i></span></div>
+        <label class="sr-only" for="music-seek">播放进度</label><input class="music-range" id="music-seek" type="range" min="0" max="1000" value="0" step="1" disabled>
+        <div class="music-times"><span id="music-elapsed">0:00</span><span id="music-duration">6:21</span></div>
+        <div class="music-settings"><button class="music-icon" id="music-repeat" aria-label="关闭单曲循环" aria-pressed="true" title="单曲循环"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m16 3 4 4-4 4M4 11V9a2 2 0 0 1 2-2h14M8 21l-4-4 4-4m12 0v2a2 2 0 0 1-2 2H4"/></svg></button><button class="music-icon" id="music-mute" aria-label="静音" title="静音"></button><label class="sr-only" for="music-volume">音量</label><input class="music-range volume-range" id="music-volume" type="range" min="0" max="100" value="35" step="1"><span id="music-volume-value">35%</span></div>
+        <p class="music-status" id="music-status" role="status" aria-live="polite">正在开启背景音乐…</p>
+        <a class="music-source" href="https://music.163.com/#/song?id=1403318151" target="_blank" rel="noopener noreferrer">在网易云音乐打开 <span aria-hidden="true">↗</span></a>
+      </div>
+    </section>
+    <div class="music-dock">
+      <button class="music-summary" id="music-expand" aria-expanded="false" aria-controls="music-panel" aria-label="展开音乐播放器">
+        <span class="music-disc" aria-hidden="true"><span></span></span>
+        <span class="music-track"><span class="music-station">MIDNIGHT RADIO <i></i></span><strong>把回忆拼好给你</strong><small>王贰浪 <span>· 点击展开</span></small></span>
+      </button>
+      <button class="music-play" id="music-play" aria-label="播放音乐" title="播放音乐"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 11 7-11 7Z"/></svg></button>
+    </div>
+    <audio id="blog-audio" preload="none"></audio>
+  </aside>
+  <div class="click-effects" id="click-effects" aria-hidden="true"></div>
+  <button class="back-top icon-button" id="back-top" aria-label="回到顶部" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 12 6-6 6 6M12 6v13"/></svg></button>
+  <dialog id="search-dialog" class="search-dialog" aria-labelledby="search-title">
+    <form method="dialog" class="search-top"><h2 id="search-title">寻找一点灵感</h2><button class="icon-button" aria-label="关闭搜索">✕</button></form>
+    <div class="search-field"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4.6 4.6"/></svg><input id="search-input" type="search" placeholder="搜索文章、标签或关键词…" aria-label="搜索文章、标签或关键词" autocomplete="off"></div>
+    <div class="search-results" id="search-results" aria-live="polite"></div>
+    <div class="search-help"><span>输入关键词，发现相关记录</span><kbd>ESC 关闭</kbd></div>
+  </dialog>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <noscript><p class="noscript">请启用浏览器 JavaScript，以浏览文章和使用搜索功能。</p></noscript>
+</body>
+</html>
