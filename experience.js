@@ -25,6 +25,9 @@
   let scrubbing = false;
   let introTimer;
   let observer;
+  const finePointer = matchMedia('(hover: hover) and (pointer: fine)');
+  let sceneCleanup = () => {};
+  let routeAnimation;
 
   function paintRange(element, percent) {
     element.style.setProperty('--range-fill', `${Math.max(0, Math.min(100, percent))}%`);
@@ -216,20 +219,153 @@
       observer.observe(element);
     });
   }
-  document.addEventListener('blog:render', revealContent);
+  function bindScene() {
+    sceneCleanup();
+    const hero = document.querySelector('.anime-hero');
+    if (!hero || motion.matches) return;
+    const atmosphere = document.createElement('div');
+    atmosphere.className = 'hero-atmosphere';
+    atmosphere.setAttribute('aria-hidden', 'true');
+    hero.prepend(atmosphere);
+    const events = new AbortController();
+    let frame = 0;
+    let visible = true;
+    let x = 0, y = 0, targetX = 0, targetY = 0;
+    function paintScene() {
+      frame = 0;
+      x += (targetX - x) * .085;
+      y += (targetY - y) * .085;
+      hero.style.setProperty('--scene-x', `${x * 12}px`);
+      hero.style.setProperty('--scene-y', `${y * 8}px`);
+      hero.style.setProperty('--stars-x', `${x * 25}px`);
+      hero.style.setProperty('--stars-y', `${y * 17}px`);
+      // 鼠标停下后停止逐帧计算，页面隐藏或离开首屏时也不空转。
+      if (Math.abs(targetX - x) + Math.abs(targetY - y) > .002) frame = requestAnimationFrame(paintScene);
+    }
+    function centerScene() {
+      cancelAnimationFrame(frame);
+      frame = 0;
+      x = y = targetX = targetY = 0;
+      ['--scene-x','--scene-y','--stars-x','--stars-y'].forEach(name => hero.style.removeProperty(name));
+    }
+    function syncScene() {
+      const paused = !visible || document.hidden;
+      hero.classList.toggle('scene-paused', paused);
+      if (paused) centerScene();
+    }
+    hero.addEventListener('pointermove', event => {
+      if (!finePointer.matches || event.pointerType === 'touch' || !visible || document.hidden) return;
+      const bounds = hero.getBoundingClientRect();
+      targetX = (event.clientX - bounds.left) / bounds.width * 2 - 1;
+      targetY = (event.clientY - bounds.top) / bounds.height * 2 - 1;
+      if (!frame) frame = requestAnimationFrame(paintScene);
+    }, {passive:true, signal:events.signal});
+    hero.addEventListener('pointerleave', () => {
+      targetX = targetY = 0;
+      if (!frame && visible && !document.hidden) frame = requestAnimationFrame(paintScene);
+    }, {signal:events.signal});
+    document.addEventListener('visibilitychange', syncScene, {signal:events.signal});
+    finePointer.addEventListener('change', centerScene, {signal:events.signal});
+    function placeMeteor(meteor) {
+      const distance = 21 + Math.random() * 15;
+      meteor.style.left = `${48 + Math.random() * 47}%`;
+      meteor.style.top = `${3 + Math.random() * 23}%`;
+      meteor.style.setProperty('--meteor-dx', `${-distance}vw`);
+      meteor.style.setProperty('--meteor-dy', `${distance * .7}vw`);
+      meteor.style.setProperty('--tail', `clamp(65px,${7 + Math.random() * 6}vw,180px)`);
+    }
+    hero.querySelectorAll('.hero-meteors i').forEach(meteor => {
+      placeMeteor(meteor);
+      // 只在流星已淡出的循环边界换轨迹，避免飞行途中突然跳动。
+      meteor.addEventListener('animationiteration', () => placeMeteor(meteor), {signal:events.signal});
+    });
+    const visibility = 'IntersectionObserver' in window ? new IntersectionObserver(entries => {
+      visible = entries[0].isIntersecting;
+      syncScene();
+    }, {threshold:0}) : null;
+    visibility?.observe(hero);
+    syncScene();
+    sceneCleanup = () => { events.abort(); visibility?.disconnect(); centerScene(); atmosphere.remove(); hero.classList.remove('scene-paused'); };
+  }
+  document.addEventListener('blog:render', () => {
+    revealContent();
+    bindScene();
+    resetCard();
+    routeAnimation?.cancel();
+    if (!motion.matches) routeAnimation = document.querySelector('#main').animate(
+      [{opacity:.35,transform:'translateY(12px)'},{opacity:1,transform:'translateY(0)'}],
+      {duration:420,easing:'cubic-bezier(.16,1,.3,1)'}
+    );
+  });
   revealContent();
+  bindScene();
   motion.addEventListener('change', () => {
+    bindScene();
     if (motion.matches) {
       finishIntro();
+      resetCard();
+      routeAnimation?.cancel();
+      document.querySelector('#click-effects').replaceChildren();
       observer?.disconnect();
       document.querySelectorAll('[data-reveal]').forEach(element => delete element.dataset.reveal);
     }
   });
 
+  let activeCard;
+  let cardFrame = 0;
+  let cardPoint;
+  function resetCard() {
+    cancelAnimationFrame(cardFrame);
+    cardFrame = 0;
+    if (!activeCard) return;
+    activeCard.classList.remove('has-pointer');
+    ['--card-rx','--card-ry','--light-x','--light-y'].forEach(name => activeCard.style.removeProperty(name));
+    activeCard = null;
+  }
+  document.addEventListener('pointermove', event => {
+    if (motion.matches || !finePointer.matches || event.pointerType === 'touch') return;
+    const card = event.target.closest('.post-card');
+    if (card !== activeCard) { resetCard(); activeCard = card; }
+    if (!card) return;
+    cardPoint = {x:event.clientX,y:event.clientY};
+    if (cardFrame) return;
+    cardFrame = requestAnimationFrame(() => {
+      cardFrame = 0;
+      if (!activeCard?.isConnected) { resetCard(); return; }
+      const bounds = activeCard.getBoundingClientRect();
+      const x = Math.max(0,Math.min(1,(cardPoint.x - bounds.left) / bounds.width));
+      const y = Math.max(0,Math.min(1,(cardPoint.y - bounds.top) / bounds.height));
+      activeCard.style.setProperty('--card-rx', `${(y - .5) * -4}deg`);
+      activeCard.style.setProperty('--card-ry', `${(x - .5) * 4}deg`);
+      activeCard.style.setProperty('--light-x', `${x * 100}%`);
+      activeCard.style.setProperty('--light-y', `${y * 100}%`);
+      activeCard.classList.add('has-pointer');
+    });
+  }, {passive:true});
+  document.addEventListener('pointerout', event => { if (!event.relatedTarget) resetCard(); }, {passive:true});
+  window.addEventListener('scroll', resetCard, {passive:true});
+  finePointer.addEventListener('change', resetCard);
+  document.addEventListener('visibilitychange', () => { if (document.hidden) resetCard(); });
+
   document.addEventListener('pointerdown', event => {
     if (motion.matches || event.button !== 0) return;
     const target = event.target.closest('button,.button,.filter,.tag-pill,.post-link,.desktop-nav a');
-    if (!target || target.disabled) return;
+    if ((!target && !event.target.closest('.anime-hero')) || target?.disabled) return;
+    const effects = document.querySelector('#click-effects');
+    const count = event.pointerType === 'touch' ? 3 : 6;
+    // 限制同时存在的星光数量，连续点击也不会积累装饰节点。
+    while (effects.childElementCount > 28) effects.firstElementChild.remove();
+    for (let i = 0; i < count; i++) {
+      const sparkle = document.createElement('span');
+      const angle = Math.PI * 2 * i / count + Math.random() * .4;
+      const distance = 25 + Math.random() * 34;
+      sparkle.className = 'click-sparkle';
+      sparkle.textContent = i % 2 ? '✧' : '✦';
+      sparkle.style.cssText = `left:${event.clientX}px;top:${event.clientY}px;--spark-x:${Math.cos(angle)*distance}px;--spark-y:${Math.sin(angle)*distance-18}px;--spark-turn:${90+Math.random()*90}deg;font-size:${8+Math.random()*8}px;--spark-color:${i%2?'#a5e6ff':'#d7baff'}`;
+      effects.append(sparkle);
+      setTimeout(() => sparkle.remove(), 850);
+    }
+    if (!target) return;
     const bounds = target.getBoundingClientRect();
     const wave = document.createElement('span');
     const size = Math.max(bounds.width, bounds.height) * 2;
@@ -240,11 +376,5 @@
     target.classList.add('ripple-host');
     target.append(wave);
     setTimeout(() => wave.remove(), 650);
-    const sparkle = document.createElement('span');
-    sparkle.className = 'click-sparkle';
-    sparkle.textContent = '✦';
-    sparkle.style.cssText = `left:${event.clientX}px;top:${event.clientY}px`;
-    document.querySelector('#click-effects').append(sparkle);
-    setTimeout(() => sparkle.remove(), 650);
   }, { passive: true });
 })();
