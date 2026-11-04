@@ -40,6 +40,45 @@ main:focus{outline:none}
 .featured .post-title{font-size:25px}
 .featured .post-image{min-height:318px}
 .about-card,.note-card{box-shadow:inset 0 1px 0 #ffffff08,0 12px 32px #01061420}
+/* 太阳系自成深色星空，让明暗主题下的行星光影都保持清晰。 */
+.about-art.solar-system{padding:0;min-width:0;width:100%;min-height:340px;aspect-ratio:1.48;background:#080e22;border:1px solid #9996db38;border-radius:22px;isolation:isolate;box-shadow:inset 0 1px 0 #ffffff09,0 20px 65px #02051b35}
+.solar-stage{position:absolute;inset:0}
+.solar-canvas{display:block;width:100%;height:100%;outline:none}
+.solar-heading{position:absolute;left:27px;top:25px;z-index:1;pointer-events:none}
+.solar-kicker{display:block;font:8px var(--mono);letter-spacing:2.1px;color:#929dbf}
+.solar-title{display:flex;align-items:center;gap:12px;margin-top:9px;font-size:15px;letter-spacing:2px;color:#e3e1f8}
+.solar-title>span{color:#b7a5f6;font-size:12px}
+.solar-expand{position:absolute;inset:0;z-index:2;border:0;border-radius:inherit;background:transparent;color:#e2ddf8;text-align:left;transition:background .25s}
+.solar-expand>svg{position:absolute;right:23px;top:25px;width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.4;opacity:.7}
+.solar-hint{position:absolute;left:50%;bottom:53px;transform:translateX(-50%);padding:6px 12px;border:1px solid #b6a0ff30;border-radius:30px;background:#0b1024aa;white-space:nowrap;font-size:10px;letter-spacing:1px;color:#bcbad6;transition:background .2s,color .2s}
+.solar-expand:hover{background:#a498ff05}.solar-expand:hover .solar-hint{color:#f0eaff;background:#2b244dcb}
+.solar-expand:focus-visible{outline:2px solid #c8b7ff;outline-offset:-5px}
+.solar-dialog{width:min(1180px,calc(100vw - 48px));height:min(820px,calc(100dvh - 48px));max-width:none;max-height:none;margin:auto;padding:0;border:1px solid #72749170;border-radius:24px;background:#050915;color:#ececf6;overflow:hidden;box-shadow:0 30px 120px #000b}
+.solar-dialog::backdrop{background:#030613d9;backdrop-filter:blur(12px)}
+.solar-dialog[open]{display:flex;flex-direction:column;animation:solar-open .3s ease-out}
+.solar-toolbar{position:absolute;top:0;left:0;right:0;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:18px;padding:23px 27px;background:linear-gradient(#050915e8,transparent);pointer-events:none}
+.solar-toolbar h2{margin:0;font-size:17px;font-weight:500;letter-spacing:2px}.solar-toolbar small{display:block;margin-top:4px;color:#919bb7;font:9px var(--mono);letter-spacing:2px}
+.solar-toolbar-actions{display:flex;gap:8px;pointer-events:auto}
+.solar-control{width:44px;height:44px;padding:0;display:grid;place-items:center;border:1px solid #a5a6c730;border-radius:50%;background:#171d31a6;color:#c8cbe0;transition:background .2s,color .2s}
+.solar-control:hover{background:#393454;color:#fff}.solar-control:focus-visible,.solar-planet:focus-visible{outline:2px solid #c8b7ff;outline-offset:3px}
+.solar-control svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.solar-view{position:relative;flex:1;min-height:0;touch-action:none;cursor:grab}.solar-view:active{cursor:grabbing}
+.solar-view .solar-stage{inset:0}.solar-info{position:absolute;left:30px;bottom:130px;pointer-events:none;max-width:230px;text-shadow:0 2px 12px #000}
+.solar-info small{font:10px var(--mono);letter-spacing:3px;color:#9ca9c4}.solar-info h3{font-size:30px;letter-spacing:4px;margin:8px 0}.solar-info p{font-size:12px;line-height:1.9;color:#afb9d0;margin:0}
+.solar-navigation{position:absolute;left:24px;right:24px;bottom:31px;z-index:2}.solar-planets{display:flex;gap:6px;padding:10px;border:1px solid #a5a6c725;border-radius:15px;background:#11172bc9;backdrop-filter:blur(18px);overflow-x:auto;scrollbar-width:thin}
+.solar-planet{flex:1;min-width:57px;min-height:48px;border:1px solid transparent;border-radius:9px;background:transparent;color:#aeb7ce;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;font-size:10px;white-space:nowrap}
+.solar-planet i{width:5px;height:5px;border-radius:50%;background:var(--planet-color);box-shadow:0 0 8px color-mix(in srgb,var(--planet-color),transparent 60%)}
+.solar-planet[aria-pressed=true]{background:#b6a0ff16;border-color:#b6a0ff38;color:#eee7ff}.solar-planet:hover{background:#b6a0ff12;color:#fff}
+.solar-help{display:flex;justify-content:space-between;gap:12px;margin:11px 4px 0;color:#8c97b3;font-size:10px}.solar-help a{color:#a2acc5}.solar-help a:hover{color:#eee7ff}
+.solar-context-note{position:absolute;inset:38% 20% auto;text-align:center;background:#080e22eb;border:1px solid #b6a0ff40;border-radius:12px;padding:18px;color:#c8cbe0;font-size:13px;z-index:3}
+@keyframes solar-open{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:none}}
+@media(max-width:680px){.solar-dialog{width:calc(100vw - 16px);height:calc(100dvh - 24px);border-radius:18px}.solar-toolbar{padding:18px 16px}.solar-toolbar h2{font-size:15px}.solar-toolbar-actions{gap:5px}.solar-control{width:40px;height:44px}.solar-info{left:22px;bottom:154px;max-width:210px}.solar-info h3{font-size:25px}.solar-info p{font-size:11px}.solar-navigation{left:12px;right:12px;bottom:22px}.solar-planets{gap:3px;padding:7px}.solar-help{font-size:9px;flex-wrap:wrap;gap:5px}.solar-hint{font-size:9px;bottom:49px}.solar-context-note{inset:38% 10% auto}}
+@media(prefers-reduced-motion:reduce){.solar-dialog[open]{animation:none}}
+.solar-caption{position:absolute;left:27px;right:27px;bottom:24px;display:flex;align-items:center;justify-content:space-between;gap:12px;z-index:1;pointer-events:none}
+.solar-caption>span:first-child{display:flex;align-items:center;gap:8px;font-size:10px;letter-spacing:1px;color:#aeb7d1}
+.solar-caption i{width:4px;height:4px;border-radius:50%;background:#87d7db;box-shadow:0 0 9px #87d7db88}
+.solar-caption>span:last-child{font:8px var(--mono);letter-spacing:1.7px;color:#939dbd}
+@media(max-width:680px){.about-art.solar-system{min-height:285px;aspect-ratio:1.25}.solar-heading{left:22px;top:22px}.solar-kicker{font-size:7px;letter-spacing:1.8px}.solar-title{font-size:14px}.solar-caption{left:22px;right:22px;bottom:21px}.solar-caption>span:first-child{font-size:9px;letter-spacing:0}.solar-caption>span:last-child{font-size:7px;letter-spacing:1px}}
 .avatar{box-shadow:0 0 0 5px #b6a0ff0b,0 0 0 6px #b6a0ff26,0 8px 24px #0003;margin-bottom:23px}
 .closing-banner{background:linear-gradient(100deg,#28204d70,#142e4040),url('./assets/anime-journey.jpg') center 48%/cover;border-color:#b6a0ff35;isolation:isolate}
 .closing-banner:before{content:'';position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,#101629ed,#101629cc 65%,#10162970)}

@@ -27,6 +27,8 @@
   let observer;
   const finePointer = matchMedia('(hover: hover) and (pointer: fine)');
   let sceneCleanup = () => {};
+  let solarCleanup = () => {};
+  let solarRequest = 0;
   let routeAnimation;
 
   function paintRange(element, percent) {
@@ -287,9 +289,28 @@
     syncScene();
     sceneCleanup = () => { events.abort(); visibility?.disconnect(); centerScene(); atmosphere.remove(); hero.classList.remove('scene-paused'); };
   }
+  async function bindSolarSystem() {
+    const request = ++solarRequest;
+    solarCleanup();
+    solarCleanup = () => {};
+    const card = document.querySelector('.solar-system');
+    if (!card) return;
+    try {
+      // 三维模块只在关于页加载，快速切页时不把旧场景挂到已经移除的卡片上。
+      const {mountSolarSystem} = await import('./solar-system.js');
+      if (request !== solarRequest || !card.isConnected) return;
+      solarCleanup = mountSolarSystem(card, motion);
+    } catch (error) {
+      if (request !== solarRequest || !card.isConnected) return;
+      card.querySelector('.solar-hint').textContent = '三维画面暂未加载，点击重试';
+      card.querySelector('.solar-expand').addEventListener('click', bindSolarSystem, {once:true});
+      console.warn('Solar system could not be loaded.', error);
+    }
+  }
   document.addEventListener('blog:render', () => {
     revealContent();
     bindScene();
+    bindSolarSystem();
     resetCard();
     routeAnimation?.cancel();
     if (!motion.matches) routeAnimation = document.querySelector('#main').animate(
@@ -299,6 +320,7 @@
   });
   revealContent();
   bindScene();
+  bindSolarSystem();
   motion.addEventListener('change', () => {
     bindScene();
     if (motion.matches) {
